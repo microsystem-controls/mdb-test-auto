@@ -1,4 +1,4 @@
-from mdb import MDBSetupResponse
+from mdb.MDBSetupResponse import MDBSetupResponse
 from mdb_test_auto.schema import DeviceInfo
 
 
