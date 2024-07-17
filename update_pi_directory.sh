@@ -16,10 +16,10 @@ if [[ " $* " == *" --copy "* ]]; then
     $plinkPath "$piUser@$piHost" "mkdir -p $destDir"
 
     # Remove the directory on the Raspberry Pi if it exists
-    $plinkPath "$piUser@$piHost" "rm -rf ${destDir}*"
+    $plinkPath "$piUser@$piHost" "rm -rf ${destDir}"
 
     # Copy all files from the current directory to the Raspberry Pi
-    $pscpPath -r "$sourceDir/*" "$piUser@$piHost:$destDir"
+    $pscpPath -r "$sourceDir/" "$piUser@$piHost:$destDir"
     
     # Give permissions and execute server in tmux
     $plinkPath "$piUser@$piHost" "chmod a+x ${destDir}run_server.sh && dos2unix ${destDir}run_server.sh"
@@ -33,10 +33,10 @@ if [[ " $* " == *" --copy-frontend "* ]]; then
     $plinkPath "$piUser@$piHost" "mkdir -p $frontendDir"
 
     # Remove the directory on the Raspberry Pi if it exists
-    $plinkPath "$piUser@$piHost" "rm -rf ${frontendDir}*"
+    $plinkPath "$piUser@$piHost" "rm -rf ${frontendDir}"
 
     # Copy all files from the frontend directory to the Raspberry Pi
-    $pscpPath -r "$sourceDir/$frontend*" "$piUser@$piHost:$frontendDir"
+    $pscpPath -r "$sourceDir/$frontend" "$piUser@$piHost:$frontendDir"
 fi
 
 if [[ " $* " == *" --restart-server "* ]]; then
