@@ -4,10 +4,10 @@ from typing import List
 
 @dataclass
 class MDBSetupResponse:
-    feature_level: str
-    country_currency_code: str
-    coin_scaling_factor: str
-    decimal_places: str
+    feature_level: int
+    country_currency_code: int
+    coin_scaling_factor: int
+    decimal_places: int
     coin_type_routing: List[int]
     coin_type_credit: List[int]
 
