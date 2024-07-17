@@ -10,10 +10,16 @@ $password = "pi"
 $sourceDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 
 # Remove the directory on the Raspberry Pi if it exists
-& $plinkPath -batch -pw $password "$piUser@$piHost" "rm -rf $destDir"
+& $plinkPath -batch -pw $password "$piUser@$piHost" "rm -rf $destDir*"
 
 # Copy all files from the current directory to the Raspberry Pi
 & $pscpPath -batch -r -pw $password "$sourceDir" "${piUser}@${piHost}:/home/pi/"
 
-# Give permissions and execute server in tmux
-& $plinkPath -batch -pw $password "$piUser@$piHost" "chmod a+x ${destDir}run_server.sh && dos2unix ${destDir}run_server.sh && ${destDir}run_server.sh"
+if ($args -contains "--reload"){
+
+}
+else {
+	# Give permissions and execute server in tmux
+	& $plinkPath -batch -pw $password "$piUser@$piHost" "chmod a+x ${destDir}run_server.sh && dos2unix ${destDir}run_server.sh && ${destDir}run_server.sh"
+
+}
