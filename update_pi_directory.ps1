@@ -7,8 +7,7 @@ $destDir = "/home/pi/mdb-test-auto/"
 $password = "pi"
 
 # Get the current user's home directory
-$currentUserName = $env:UserName
-$sourceDir = "C:\Users\$currentUserName\mdb-test-auto"
+$sourceDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 
 # Remove the directory on the Raspberry Pi if it exists
 & $plinkPath -batch -pw $password "$piUser@$piHost" "rm -rf $destDir"
