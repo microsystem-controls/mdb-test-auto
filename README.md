@@ -1,7 +1,5 @@
 ## installation
 
-to do: automate poetry install (one time off)
-
 open powershell:
 
 ```
