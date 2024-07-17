@@ -6,19 +6,24 @@ $piHost = "192.168.1.197"
 $destDir = "/home/pi/mdb-test-auto/"
 $password = "pi"
 
-# Get the current user's home directory
-$sourceDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+if ($args -contains "--copy"){
+	# Get the current user's home directory
+	$sourceDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 
-# Check if destination directory exists; create if not
-& $plinkPath -batch -pw $password "$piUser@$piHost" "mkdir -p $destDir"
+	# Check if destination directory exists; create if not
+		& $plinkPath -batch -pw $password "$piUser@$piHost" "mkdir -p $destDir"
 
-# Remove the directory on the Raspberry Pi if it exists
-& $plinkPath -batch -pw $password "$piUser@$piHost" "rm -rf $destDir*"
+	# Remove the directory on the Raspberry Pi if it exists
+		& $plinkPath -batch -pw $password "$piUser@$piHost" "rm -rf $destDir*"
 
-# Copy all files from the current directory to the Raspberry Pi
-& $pscpPath -batch -r -pw $password "$sourceDir\*" "${piUser}@${piHost}:${destDir}"
+	# Copy all files from the current directory to the Raspberry Pi
+		& $pscpPath -batch -r -pw $password "$sourceDir\*" "${piUser}@${piHost}:${destDir}"
+		
+	# Give permissions and execute server in tmux
+	& $plinkPath -batch -pw $password "$piUser@$piHost" "chmod a+x ${destDir}run_server.sh && dos2unix ${destDir}run_server.sh"
+}
 
 if ($args -contains "--restart-server"){
 	# Give permissions and execute server in tmux
-	& $plinkPath -batch -pw $password "$piUser@$piHost" "chmod a+x ${destDir}run_server.sh && dos2unix ${destDir}run_server.sh && ${destDir}run_server.sh"
+	& $plinkPath -batch -pw $password "$piUser@$piHost" "${destDir}run_server.sh"
 }
