@@ -2,6 +2,7 @@ class Denomination{
 	constructor(routing, credit){
 		this.routing = routing;
 		this.credit = credit;
+		this.cycle_count = 0;
 	}
 }
 
@@ -26,11 +27,23 @@ class Table{
 				),
 				$('<tbody>').append(
 					this.denominations.map((denomination, index) => (
-						$('<tr class="table-success">').append([
+						$(`<tr id=${denomination.routing} class="table-success">`).append([
 							$('<th scope="row">').text(index + 1),
 							$('<th>').text(this.serial_number),
 							$('<th>').text(denomination.credit),
-							$('<th>').text(0),
+							$('<th>').append(
+								$('<div class="input-group">').append(
+								$('<input>', {
+										class: 'form-control',
+										type: 'number',
+										min: 0,
+										value: denomination.cycle_count,
+										step: 10,
+										}).on('input', function() {
+											denomination.cycle_count = parseInt($(this).val()) || 0;
+									})
+								)
+							)
 						])
 					))
 				)
@@ -41,7 +54,6 @@ class Table{
 var last_data;
 var denominations;
 var result_table;
-	
 
 $(document).ready(function() {
 	$('#device-info').click(function() {
@@ -61,6 +73,6 @@ $(document).ready(function() {
 			.catch(error => {
 				console.error('Error fetching device info:', error);
 				document.getElementById('device-info').innerHTML = '<p>An error occurred while fetching device info.</p>';
-			});
+		});
 	});
 });
