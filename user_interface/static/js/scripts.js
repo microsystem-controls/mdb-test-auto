@@ -15,7 +15,7 @@ class Table{
 		$('.table').append(
 			[
 				$('<thead>').append(
-					$('<tr>').append(
+					$('<tr class="table-primary">').append(
 						[
 							$('<th scope="col">').text("#"),
 							$('<th scope="col">').text("serial number"),
@@ -25,7 +25,7 @@ class Table{
 					)
 				),
 				$('<tbody>').append(
-					$('<tr>').append(
+					$('<tr class="table-success">').append(
 						[
 							$('<th scope="row">').text("1"),
 							$('<th>').text(this.serial_number),
