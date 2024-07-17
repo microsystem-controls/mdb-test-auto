@@ -12,8 +12,8 @@ class Table{
 		this.serial_number = serial_number;
 	}
 	initialiseCycleSelection(){
-		$('.table').empty()
-		$('.table').append(
+		$('#result-table').empty()
+		$('#result-table').append(
 			[
 				$('<thead>').append(
 					$('<tr class="table-primary">').append(
@@ -49,6 +49,7 @@ class Table{
 				)
 			]
 		)
+		$('#run-button')
 	}
 }
 var last_data;
@@ -56,7 +57,6 @@ var denominations;
 var result_table;
 
 $(document).ready(function() {
-	$('#device-info').click(function() {
 		fetch('/api/device_info')
 			.then(response => {
 				if (!response.ok) {
@@ -74,5 +74,6 @@ $(document).ready(function() {
 				console.error('Error fetching device info:', error);
 				document.getElementById('device-info').innerHTML = '<p>An error occurred while fetching device info.</p>';
 		});
-	});
+	// $('#device-info').click(function() {
+	// });
 });
