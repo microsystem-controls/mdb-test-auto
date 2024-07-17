@@ -25,14 +25,14 @@ class Table{
 					)
 				),
 				$('<tbody>').append(
-					$('<tr class="table-success">').append(
-						[
-							$('<th scope="row">').text("1"),
+					this.denominations.map((denomination, index) => (
+						$('<tr class="table-success">').append([
+							$('<th scope="row">').text(index + 1),
 							$('<th>').text(this.serial_number),
-							$('<th>').text(this.denominations[0].credit),
+							$('<th>').text(denomination.credit),
 							$('<th>').text(0),
-						]
-					)
+						])
+					))
 				)
 			]
 		)
