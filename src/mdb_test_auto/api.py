@@ -1,5 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from mdb import MDB, CoinTypesToDespense
 from .utils import create_device_info
@@ -56,3 +59,15 @@ def run_test(cycles: dict[int,int]):
 @app.get("/api/results")
 def get_test_results():
     return mdb.test_result
+
+
+## user interface
+
+app.mount("/static", StaticFiles(directory="user_interface/static"), name="static")
+
+templates = Jinja2Templates(directory="user_interface/templates")
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
