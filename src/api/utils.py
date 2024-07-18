@@ -1,5 +1,5 @@
 from mdb.MDBSetupResponse import MDBSetupResponse
-from mdb_test_auto.schema import DeviceInfo
+from api.schema import DeviceInfo
 
 
 def create_device_info(device_info_data: str,device_setup_data: MDBSetupResponse) -> DeviceInfo:
