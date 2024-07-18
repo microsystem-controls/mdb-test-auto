@@ -100,6 +100,4 @@ $(document).ready(function() {
 				console.error('Error fetching device info:', error);
 				document.getElementById('device-info').innerHTML = '<p>An error occurred while fetching device info.</p>';
 		});
-	// $('#device-info').click(function() {
-	// });
 });
