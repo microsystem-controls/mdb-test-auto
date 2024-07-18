@@ -38,7 +38,7 @@ class Table{
 										type: 'number',
 										min: 0,
 										value: denomination.cycle_count,
-										step: 10,
+										step: 1,
 										}).on('input', function() {
 											denomination.cycle_count = parseInt($(this).val()) || 0;
 									})
@@ -49,7 +49,21 @@ class Table{
 				)
 			]
 		)
-		$('#run-button')
+		$('#run-button').append(
+				$('<button class="btn btn-primary">').text('run').on("click", () => {
+					const resulting_denominations = result_table.denominations.filter(denomination => denomination.cycle_count != 0)
+					if (resulting_denominations.length == 0){
+						alert('in order to run, please specify a counter > 0 for at least one denomination')
+					}
+					else{
+						const denominations_for_export = resulting_denominations.reduce((dictionary, denomination) => {
+							dictionary[denomination.routing] = denomination.cycle_count;
+							return dictionary;
+						}, {});
+						console.table(denominations_for_export)
+					}
+			})
+		)
 	}
 }
 var last_data;
