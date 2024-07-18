@@ -61,6 +61,18 @@ class Table{
 							return dictionary;
 						}, {});
 						console.table(denominations_for_export)
+					fetch("/api/run", {
+						method: "POST",
+						body: JSON.stringify(denominations_for_export),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+					.then((response) => response.json())
+					.then((json) => console.log(json))
+					.catch(error => {
+							console.error('error running cycles with denominations', error);
+					})
 					}
 			})
 		)
