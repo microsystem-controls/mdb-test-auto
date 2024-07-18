@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
@@ -49,6 +49,10 @@ def cancel_test():
 
 @app.post("/api/run")
 def run_test(cycles: dict[int,int]):
+    if mdb.test_status == "running":
+        return HTTPException(status_code=status.HTTP_403_FORBIDDEN, 
+                             detail="A test is already running.");
+
     coins_to_dispense = []
     for coin_type in cycles:
         coin_to_dispense = CoinTypesToDespense(coin_type, cycles[coin_type])

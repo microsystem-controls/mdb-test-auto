@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-packages = [{include = "mdb_test_auto", from = "src"}]
+packages = [{include = "api", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
