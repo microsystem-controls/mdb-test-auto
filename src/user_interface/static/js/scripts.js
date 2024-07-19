@@ -144,7 +144,8 @@ function handleStopped(){
 function handleRunning(){
 	$('#stopped').hide()
 	$('#running').show()
-	fetch('/api/results')
+	function fetchResults() {
+		fetch('/api/results')
 		.then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
@@ -162,6 +163,9 @@ function handleRunning(){
 			console.error('Error fetching results:', error);
 			$('#errors').show().html('<p>error fetching results</p>');
 		});
+	}
+	fetchResults()
+	setInterval(fetchResults, 5000);
 }
 
 function fetchStatus(){
