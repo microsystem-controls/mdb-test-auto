@@ -153,7 +153,7 @@ function handleRunning(){
 		})
 		.then(data => {
 			result_table_data = data;
-			const columns = Object.keys(result_table_data.coin_results[0])
+			const columns = Object.keys(result_table_data.coin_results[0]).map(str => str.replace(/_/g, '\n'))
 			const rows = Object.values(result_table_data.coin_results)
 			result_table = new ResultTable(columns, rows);
 			result_table.displayResults()
