@@ -1,3 +1,5 @@
+import os
+from threading import Thread
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -58,7 +60,7 @@ def run_test(cycles: dict[int,int]):
         coin_to_dispense = CoinTypesToDespense(coin_type, cycles[coin_type])
         coins_to_dispense.append(coin_to_dispense)
 
-    mdb.run_test(coins_to_dispense)
+    Thread(target= mdb.run_test, args=(coins_to_dispense,),daemon= True).start()
 
 @app.get("/api/results")
 def get_test_results():
@@ -66,10 +68,10 @@ def get_test_results():
 
 
 ## user interface
+static_path = os.path.dirname(os.path.abspath(__file__))
+app.mount("/static", StaticFiles(directory=os.path.join(static_path,"..","user_interface","static")), name="static")
 
-app.mount("/static", StaticFiles(directory="user_interface/static"), name="static")
-
-templates = Jinja2Templates(directory="user_interface/templates")
+templates = Jinja2Templates(directory=os.path.join(static_path,"..","user_interface","templates"))
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):

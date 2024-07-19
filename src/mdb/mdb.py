@@ -52,13 +52,16 @@ class MDB:
         poll_responses_parsed = VMCPollResponseParser.parse(poll_response[2:])
         return poll_responses_parsed
 
-    def dispense_and_wait_to_return(self, coin_type: int, dispense: bool):
+    def dispense_and_wait_to_return(self, coin_type: int, dispense: bool, timeout_in_seconds:int):
         if dispense:
             self.dispense(coin_type, 1)
             print(f"coin {coin_type} dispensed")
+        start_time = time.time()
         while True:
             if self._cancel_test_flag:
                 return
+            if time.time() - start_time > timeout_in_seconds:
+                return "lost"
             poll_results = self.poll()
             if len(poll_results) > 0:
                 poll_result = poll_results[0] 
@@ -80,11 +83,15 @@ class MDB:
             while coin_type.dispenses > 0:
                 if self._cancel_test_flag:
                     break
-                response = self.dispense_and_wait_to_return(coin_type.type, dispense_a_coin)
+                response = self.dispense_and_wait_to_return(coin_type.type, dispense_a_coin, 10)
                 print(response)
                 if response == "rejected":
                     self.test_result.coin_results[coin_type.type].rejected += 1
                     dispense_a_coin = False
+                elif response == "lost":
+                    self.test_result.coin_results[coin_type.type].lost += 1
+                    dispense_a_coin = True
+                    coin_type.dispenses -= 1
                 else:
                     dispense_a_coin = True
                     self.test_result.coin_results[coin_type.type].accepted += 1
@@ -98,9 +105,11 @@ class MDB:
         
 class CoinCycleAcceptanceResult:
     def __init__(self, cycle_details: CoinTypesToDespense):
-        self.cycle_details = cycle_details
+        self.coin_type = cycle_details.type
+        self.number_of_dispenses = cycle_details.dispenses
         self.accepted = 0
         self.rejected = 0
+        self.lost = 0
         self.total = cycle_details.dispenses
 
 class AcceptanceTestResult:
