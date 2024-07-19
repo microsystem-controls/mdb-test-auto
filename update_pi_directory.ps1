@@ -24,7 +24,7 @@ if ($args -contains "--copy"){
 }
 
 if ($args -contains "--copy-frontend"){
-    $frontend = "user_interface/"
+    $frontend = "src/user_interface/"
     $frontendDir = "${destDir}${frontend}"
 
     # Get the current user's home directory

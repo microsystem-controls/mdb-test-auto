@@ -26,7 +26,7 @@ if [[ " $* " == *" --copy "* ]]; then
 fi
 
 if [[ " $* " == *" --copy-frontend "* ]]; then
-    frontend="user_interface/"
+    frontend="src/user_interface/"
     frontendDir="${destDir}${frontend}"
 
     # Check if destination directory exists; create if not

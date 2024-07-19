@@ -7,4 +7,4 @@ WINDOW="mdb_test_auto_server"
 tmux kill-window -t "$SESSION$WINDOW" 2>/dev/null
 
 # Start a new window in the session
-tmux new-window -n "$WINDOW" -t "$SESSION" "cd mdb-test-auto; poetry install; poetry run server; $SHELL"
+tmux new-window -n "$WINDOW" -t "$SESSION" "cd mdb-test-auto; poetry install; poetry run mdb_tester; $SHELL"
