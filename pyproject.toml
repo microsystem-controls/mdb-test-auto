@@ -4,7 +4,8 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-packages = [{include = "api", from = "src"}]
+packages = [{include = "user_interface", from = "src"},{include = "server", from = "src"}, {include = "api", from = "src"}, {include= "mdb", from = "src"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -13,7 +14,7 @@ pyserial = "^3.5"
 uvicorn = "^0.30.1"
 
 [tool.poetry.scripts]
-server = "server:run"
+mdb_tester = "server.server:run"
 
 [build-system]
 requires = ["poetry-core"]
