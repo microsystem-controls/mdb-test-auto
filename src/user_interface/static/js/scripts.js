@@ -165,11 +165,7 @@ function handleRunning(){
 		});
 	}
 	fetchResults()
-<<<<<<< HEAD
 	setInterval(fetchResults, 3000);
-=======
-	setInterval(fetchResults, 5000);
->>>>>>> 41aa54a421413cc519dd23469e524898eb6ee85d
 }
 
 function fetchStatus(){
