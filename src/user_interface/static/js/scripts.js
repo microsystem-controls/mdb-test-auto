@@ -6,7 +6,8 @@ class Denomination{
 	}
 }
 
-class Table{
+
+class InputTable{
 	constructor(denominations, serial_number){
 		this.denominations = denominations;
 		this.serial_number = serial_number;
@@ -51,7 +52,7 @@ class Table{
 		)
 		$('#run-button').append(
 				$('<button class="btn btn-primary">').text('run').on("click", () => {
-					const resulting_denominations = result_table.denominations.filter(denomination => denomination.cycle_count != 0)
+					const resulting_denominations = input_table.denominations.filter(denomination => denomination.cycle_count != 0)
 					if (resulting_denominations.length == 0){
 						alert('in order to run, please specify a counter > 0 for at least one denomination')
 					}
@@ -76,6 +77,7 @@ class Table{
 							else if (json.status_code === 403){
 								alert(json.detail);
 							}
+							fetchStatus();
 						})
 					.catch(error => {
 							console.error('error running cycles with denominations', error);
@@ -85,27 +87,80 @@ class Table{
 		)
 	}
 }
-var last_data;
+
+class ResultTable{
+	constructor(columns, rows){
+		this.columns = columns;
+		this.rows = rows;
+	}
+	displayResults(){
+		$('#result-table').empty()
+		$('#result-table').append(
+			[
+				$('<thead>').append(
+					$('<tr class="table-primary">').append(
+						this.columns.map(column =>$('<th scope="col">').text(column))
+					)
+				),
+				$('<tbody>').append(
+						Object.values(this.rows).map(row => (
+							$(`<tr id=${row.coin_type} class="table-success">`).append(
+								Object.entries(row).map(([key, value]) => $('<th>').text(value))
+							)
+						))
+					)
+				]
+			)
+		}
+	}
+
+var input_table_data;
+var result_table_data;
 var denominations;
-var result_table;
+var input_table;
 
 function handleStopped(){
-		fetch('/api/device_info')
-			.then(response => {
-				if (!response.ok) {
-					throw new Error('Network response was not ok');
-				}
-				return response.json();
-			})
-			.then(data => {
-				last_data = data;
-				denominations = data.coin_type_routing.map((i) => new Denomination(i, data.coin_type_credit[i] * data.coin_scaling_factor));
-				result_table = new Table(denominations, data.serial_number);
-				result_table.initialiseCycleSelection()
-			})
-			.catch(error => {
-				console.error('Error fetching device info:', error);
-				$('#errors').show().html('<p>An error occurred while fetching device info.</p>');
+	$('#stopped').show()
+	$('#running').hide()
+	fetch('/api/device_info')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			input_table_data = data;
+			denominations = data.coin_type_routing.map((i) => new Denomination(i, data.coin_type_credit[i] * data.coin_scaling_factor));
+			input_table = new InputTable(denominations, data.serial_number);
+			input_table.initialiseCycleSelection()
+		})
+		.catch(error => {
+			console.error('Error fetching device info:', error);
+			$('#errors').show().html('<p>An error occurred while fetching device info.</p>');
+	});
+}
+
+function handleRunning(){
+	$('#stopped').hide()
+	$('#running').show()
+	fetch('/api/results')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			result_table_data = data;
+			const columns = Object.keys(result_table_data.coin_results[0])
+			const rows = Object.values(result_table_data.coin_results)
+			result_table = new ResultTable(columns, rows);
+			result_table.displayResults()
+		})
+		.catch(error => {
+			console.error('Error fetching results:', error);
+			$('#errors').show().html('<p>error fetching results</p>');
 		});
 }
 
