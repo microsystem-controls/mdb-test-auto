@@ -12,8 +12,8 @@ class Table{
 		this.serial_number = serial_number;
 	}
 	initialiseCycleSelection(){
-		$('#result-table').empty()
-		$('#result-table').append(
+		$('#input-table').empty()
+		$('#input-table').append(
 			[
 				$('<thead>').append(
 					$('<tr class="table-primary">').append(
@@ -69,7 +69,14 @@ class Table{
 						}
 					})
 					.then((response) => response.json())
-					.then((json) => console.log(json))
+					.then((json) => {
+							if (json === null) {
+								console.log(json);
+							}
+							else if (json.status_code === 403){
+								alert(json.detail);
+							}
+						})
 					.catch(error => {
 							console.error('error running cycles with denominations', error);
 					})
@@ -82,7 +89,7 @@ var last_data;
 var denominations;
 var result_table;
 
-$(document).ready(function() {
+function handleStopped(){
 		fetch('/api/device_info')
 			.then(response => {
 				if (!response.ok) {
@@ -98,6 +105,32 @@ $(document).ready(function() {
 			})
 			.catch(error => {
 				console.error('Error fetching device info:', error);
-				document.getElementById('device-info').innerHTML = '<p>An error occurred while fetching device info.</p>';
+				$('#errors').show().html('<p>An error occurred while fetching device info.</p>');
 		});
+}
+
+function fetchStatus(){
+	fetch('/api/status')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('network response was not ok');
+			}
+			return response.json();
+	})
+	.then(data => {
+			if (data == "stopped") {
+				handleStopped()
+			}
+			if (data == "running") {
+				handleRunning()
+			}
+	}).catch(error => {
+			console.error('error fetching api status:', error);
+				$('#errors').show().html('<p>An error occurred while fetching api status.</p>');
+	})
+}
+
+
+$(document).ready(function() {
+	fetchStatus()
 });

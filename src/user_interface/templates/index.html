@@ -10,16 +10,17 @@
 	<body>
 		<div class="container-fluid">
 			<h1 class="mt-5 text-center">mdb test automation acceptance test</h1>
+			<p class="mt-5 text-center" id="errors" style="display:none"></p>
 			<!-- <div class="row justify-content-center mt-1"> -->
 			<!-- 	<div class="col-md-6 text-center"> -->
 			<!-- 		<button id='device-info' class="btn btn-primary">device info</button> -->
 			<!-- 	</div> -->
 			<!-- </div> -->
-			<div>
+			<div id="stopped">
 				<div class="row justify-content-center mt-1">
 					<div class="col-md-6 text-center">
 						<div class="table-responsive">
-							<table id='result-table' class="table mt-1 table-bordered table-striped">
+							<table id='input-table' class="table mt-1 table-bordered table-striped">
 							</table>
 						</div>
 					</div>
@@ -30,6 +31,16 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div id="running">
+				<div class="row justify-content-center mt-1">
+					<div class="col-md-6 text-center">
+						<div class="table-responsive">
+							<table id='result-table' class="table mt-1 table-bordered table-striped">
+							</table>
+						</div>
+					</div>
+				</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
