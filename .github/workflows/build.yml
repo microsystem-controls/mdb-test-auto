@@ -1,1 +1,48 @@
+on: 
+   push:
+    tags: 
+        - "v*"
+        - "V*"
+        
+jobs:
+    Build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            packages: write
+        steps:
+            - name: Install Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: "3.11"
 
+            - name: Install Poetry
+              run: pip install poetry
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              run: poetry install
+
+            - name: Build Wheel
+              run: poetry build
+
+            - name: Create release
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                TAG: ${{ github.ref_name }}
+              run: |
+                gh release create $TAG --generate-notes
+                gh release upload $TAG /dist/*.whl
+
+         
+                
+              
+        
+
+ 
+
+            
+
+        
