@@ -117,7 +117,6 @@ var input_table_data;
 var result_table_data;
 var denominations;
 var input_table;
-var input_table;
 
 function handleStopped(){
 	$('#stopped').show()
