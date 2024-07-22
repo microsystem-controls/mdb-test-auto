@@ -1,9 +1,10 @@
+from io import StringIO
 import os
 from threading import Thread
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 
 from mdb import MDB, CoinTypesToDespense
@@ -48,7 +49,7 @@ def get_test_status():
 def cancel_test():
     mdb.cancel_running_test()
 
-
+ 
 @app.post("/api/run")
 def run_test(cycles: dict[int,int]):
     if mdb.test_status == "running":
@@ -66,6 +67,14 @@ def run_test(cycles: dict[int,int]):
 def get_test_results():
     return mdb.test_result
 
+@app.get("/api/csv")
+def get_csv():
+    if not mdb.test_result:
+        return HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail="No test results found") 
+   
+    response = StreamingResponse(StringIO(mdb.test_result.to_csv()), media_type="text/csv")
+    response.headers["Content-Disposition"] = "attachment; filename=test_results.csv"
+    return response
 
 ## user interface
 static_path = os.path.dirname(os.path.abspath(__file__))

@@ -1,6 +1,5 @@
 class Denomination{
-	constructor(routing, credit){
-		this.routing = routing;
+	constructor(credit){
 		this.credit = credit;
 		this.cycle_count = 0;
 	}
@@ -27,7 +26,7 @@ class Table{
 				),
 				$('<tbody>').append(
 					this.denominations.map((denomination, index) => (
-						$(`<tr id=${denomination.routing} class="table-success">`).append([
+						$(`<tr class="table-success">`).append([
 							$('<th scope="row">').text(index + 1),
 							$('<th>').text(this.serial_number),
 							$('<th>').text(denomination.credit),
@@ -57,7 +56,7 @@ class Table{
 					}
 					else{
 						const denominations_for_export = resulting_denominations.reduce((dictionary, denomination) => {
-							dictionary[denomination.routing] = denomination.cycle_count;
+							dictionary[denomination.credit] = denomination.cycle_count;
 							return dictionary;
 						}, {});
 						console.table(denominations_for_export)
@@ -80,24 +79,79 @@ class Table{
 }
 var last_data;
 var denominations;
-var result_table;
+var input_table;
+
+function handleStopped(){
+	$('#stopped').show()
+	$('#running').hide()
+	fetch('/api/device_info')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			input_table_data = data;
+			denominations = data.denominations.map(denomination => new Denomination(denomination));
+			input_table = new InputTable(denominations, data.serial_number);
+			input_table.initialiseCycleSelection()
+		})
+		.catch(error => {
+			console.error('Error fetching device info:', error);
+			$('#errors').show().html('<p>An error occurred while fetching device info.</p>');
+	});
+}
+
+function handleRunning(){
+	$('#stopped').hide()
+	$('#running').show()
+	function fetchResults() {
+		fetch('/api/results')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			result_table_data = data;
+			const columns = Object.keys(Object.values(result_table_data.coin_results)[0]).map(str => str.replace(/_/g, '\n'))
+			const rows = Object.values(result_table_data.coin_results)
+			result_table = new ResultTable(columns, rows);
+			result_table.displayResults()
+		})
+		.catch(error => {
+			console.error('Error fetching results:', error);
+			$('#errors').show().html('<p>error fetching results</p>');
+		});
+	}
+	fetchResults()
+	setInterval(fetchResults, 3000);
+}
+
+function fetchStatus(){
+	fetch('/api/status')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('network response was not ok');
+			}
+			return response.json();
+	})
+	.then(data => {
+			if (data == "stopped") {
+				handleStopped()
+			}
+			if (data == "running") {
+				handleRunning()
+			}
+	}).catch(error => {
+			console.error('error fetching api status:', error);
+				$('#errors').show().html('<p>An error occurred while fetching api status.</p>');
+	})
+}
+
 
 $(document).ready(function() {
-		fetch('/api/device_info')
-			.then(response => {
-				if (!response.ok) {
-					throw new Error('Network response was not ok');
-				}
-				return response.json();
-			})
-			.then(data => {
-				last_data = data;
-				denominations = data.coin_type_routing.map((i) => new Denomination(i, data.coin_type_credit[i] * data.coin_scaling_factor));
-				result_table = new Table(denominations, data.serial_number);
-				result_table.initialiseCycleSelection()
-			})
-			.catch(error => {
-				console.error('Error fetching device info:', error);
-				document.getElementById('device-info').innerHTML = '<p>An error occurred while fetching device info.</p>';
-		});
+	fetchStatus()
 });
