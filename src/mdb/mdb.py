@@ -8,6 +8,8 @@ from .MDBSetupResponse import MDBSetupResponse
 from .VMCPollResponseParser import VMCPollResponseParser
 from .serialcomm import SerialComm
 from .CoinTypesToDespense import CoinTypesToDespense
+import csv
+from io import StringIO
 
 
 class MDB:
@@ -15,8 +17,10 @@ class MDB:
         self.serial = SerialComm(Logger("mdb"))
         self.test_status = "stopped"
         self._cancel_test_flag = False
+        self.device_info: MDBSetupResponse = None
         self._initialise_changer()
         self.test_result = None
+        
        
 
     def _initialise_changer(self):
@@ -26,9 +30,10 @@ class MDB:
        # enabling coins
         self.serial.write("R,0C,FFFFFFFF")
         self.serial.read()
+        self.device_info = self.id()[1]
 
     def dispense(self, value: int, number:int):
-        coin_index_to_dispense = value
+        coin_index_to_dispense = self.device_info.coin_type_credit.index(value // self.device_info.coin_scaling_factor)
         i =  16 + coin_index_to_dispense
         self.serial.write(f"R,0D,{i:X}")
         dispense_response = self.serial.read()
@@ -116,7 +121,19 @@ class AcceptanceTestResult:
     def __init__(self, coin_types: list[CoinTypesToDespense]):
         self.coin_results:dict[int, CoinCycleAcceptanceResult] = {}
         for coin_type in coin_types:
-            self.coin_results[coin_type.type] = CoinCycleAcceptanceResult(coin_type)
+            self.coin_results[coin_type.type] = CoinCycleAcceptanceResult(coin_type)     
+
+    def to_csv(self):
+        header = "coin type,number of dispenses,accepted,rejected,lost,total"
+        rows = []
+        rows.append(header)
+        for cycle_result in self.coin_results.values():
+            row_data = [cycle_result.coin_type, cycle_result.number_of_dispenses, cycle_result.accepted, cycle_result.rejected, cycle_result.lost, cycle_result.total]
+            row_str= map(str, row_data)
+            rows.append(",".join(row_str))
+
+        
+        return "\n".join(rows)
 
     
 
