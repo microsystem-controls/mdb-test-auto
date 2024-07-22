@@ -1,6 +1,5 @@
 class Denomination{
-	constructor(routing, credit){
-		this.routing = routing;
+	constructor(credit){
 		this.credit = credit;
 		this.cycle_count = 0;
 	}
@@ -28,7 +27,7 @@ class InputTable{
 				),
 				$('<tbody>').append(
 					this.denominations.map((denomination, index) => (
-						$(`<tr id=${denomination.routing} class="table-success">`).append([
+						$(`<tr class="table-success">`).append([
 							$('<th scope="row">').text(index + 1),
 							$('<th>').text(this.serial_number),
 							$('<th>').text(denomination.credit),
@@ -58,7 +57,7 @@ class InputTable{
 					}
 					else{
 						const denominations_for_export = resulting_denominations.reduce((dictionary, denomination) => {
-							dictionary[denomination.routing] = denomination.cycle_count;
+							dictionary[denomination.credit] = denomination.cycle_count;
 							return dictionary;
 						}, {});
 						console.table(denominations_for_export)
@@ -131,7 +130,7 @@ function handleStopped(){
 		})
 		.then(data => {
 			input_table_data = data;
-			denominations = data.coin_type_routing.map((i) => new Denomination(i, data.coin_type_credit[i] * data.coin_scaling_factor));
+			denominations = data.denominations.map(denomination => new Denomination(denomination));
 			input_table = new InputTable(denominations, data.serial_number);
 			input_table.initialiseCycleSelection()
 		})
@@ -154,7 +153,7 @@ function handleRunning(){
 		})
 		.then(data => {
 			result_table_data = data;
-			const columns = Object.keys(result_table_data.coin_results[0]).map(str => str.replace(/_/g, '\n'))
+			const columns = Object.keys(Object.values(result_table_data.coin_results)[0]).map(str => str.replace(/_/g, '\n'))
 			const rows = Object.values(result_table_data.coin_results)
 			result_table = new ResultTable(columns, rows);
 			result_table.displayResults()
