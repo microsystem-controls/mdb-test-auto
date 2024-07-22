@@ -34,7 +34,7 @@ jobs:
                 TAG: ${{ github.ref_name }}
               run: |
                 gh release create $TAG --generate-notes
-                gh release upload $TAG /dist/*.whl
+                gh release upload $TAG ./dist/*.whl
 
          
                 
