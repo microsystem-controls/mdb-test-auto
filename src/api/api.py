@@ -84,5 +84,5 @@ templates = Jinja2Templates(directory=os.path.join(static_path,"..","user_interf
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "development_mode": "True"})
 
