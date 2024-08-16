@@ -25,5 +25,10 @@ to run the server (tmux):
 tailwind compilation:
 
 ```
-npm --prefix src/user_interface/tailwind
+npm --prefix src/user_interface/tailwindcss run dev
+```
+
+automatic reload (frontend):
+```
+browser-sync start --proxy "http://rasp3a.local:8000" --files "src/**/*.css, src/**/*.js, src/**/*.html"
 ```

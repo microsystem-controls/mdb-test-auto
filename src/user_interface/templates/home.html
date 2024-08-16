@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+	<div class="h-screen">
+		<div class="container flex flex-col mx-auto pt-10">
+			{% include 'components/input_table.html' %}
+			
+		</div>
+	</div>
+	<div class="container-fluid">
+		<h1 class="mt-5 text-center">Mdb Test Automation Acceptance Test</h1>
+		<p class="mt-5 text-center" id="errors" style="display:none"></p>
+		<!-- <div class="row justify-content-center mt-1"> -->
+		<!-- 	<div class="col-lg-6 text-center"> -->
+		<!-- 		<button id='device-info' class="btn btn-primary">device info</button> -->
+		<!-- 	</div> -->
+		<!-- </div> -->
+		<div id="stopped">
+			<div class="row justify-content-center mt-1">
+				<div class="col-lg-6 text-center">
+					<div class="table-responsive">
+						<table id='input-table' class="table mt-1 table-bordered table-striped">
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center mt-1">
+				<div class="col-lg-6 text-center">
+					<div id='run-button'</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="running">
+		<div class="row justify-content-center mt-1">
+			<div class="col-lg-6 text-center">
+				<div class="table-responsive">
+					<table id='result-table' class="table mt-1 table-bordered table-striped">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="/static/js/scripts.js"></script>
+
+{% endblock %}
+
+
+<!-- <!DOCTYPE html> -->
+<!-- <html lang="en" data-bs-theme="dark"> -->
+<!-- 	<head> -->
+<!-- 		<meta charset="UTF-8"> -->
+<!-- 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+<!-- 		<title>mdb test automation</title> -->
+<!-- 		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cerulean/bootstrap.min.css"> --> -->
+<!-- 		<link rel="stylesheet" href="/static/css/styles.css"> -->
+<!-- 		<script src="/static/js/htmx-2.0.2.js"> -->
+	<!-- 		<script src="https://cdn.tailwindcss.com"></script> -->
+	<!-- 	</head> -->
+	<!-- 	<body></body> -->
+	<!-- </html> -->
+
