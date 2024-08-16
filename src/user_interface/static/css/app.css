@@ -941,9 +941,18 @@ video {
   display: none;
 }
 
+.dark\:border-2:is(.dark *) {
+  border-width: 2px;
+}
+
 .dark\:bg-gray-300:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.dark\:bg-slate-800:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
 }
 
 .dark\:text-gray-800:is(.dark *) {
