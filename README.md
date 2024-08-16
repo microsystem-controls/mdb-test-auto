@@ -19,3 +19,11 @@ to run the server (tmux):
 ```
 ./update_pi_directory.ps1 --restart-server
 ```
+
+## development
+
+tailwind compilation:
+
+```
+npm --prefix src/user_interface/tailwind
+```
