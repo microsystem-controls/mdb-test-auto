@@ -10,6 +10,7 @@ module.exports = {
 				'microcoin-blue1': "#00718f",
 				'microcoin-blue-dark': "#023368",
 				'microcoin-red': "#ec1c24",
+        'slate-850': '#162032', // Replace this with the color value you want
 			}
 		},
   },
