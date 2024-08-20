@@ -87,12 +87,16 @@ templates = Jinja2Templates(directory=os.path.join(static_path,"..","user_interf
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     development_mode = "True"
+    return templates.TemplateResponse("home.html", {"request": request, "development_mode": development_mode})
+
+@app.get("/table", response_class=HTMLResponse)
+async def ui_get_table(request: Request):
     if mdb.test_status == "stopped":
         data = mdb.id()
         device_info = create_device_info(data[0], data[1])
-        return templates.TemplateResponse("home.html", {"request": request, "development_mode": development_mode, "device_info": device_info, "test_status": mdb.test_status})
+        return templates.TemplateResponse("components/input_table.html", {"request": request, "device_info": device_info, "test_status": mdb.test_status})
     elif mdb.test_status == "running":
-        return templates.TemplateResponse("home.html", {"request": request, "development_mode": development_mode, "test_status": mdb.test_status, "coin_results": mdb.test_result.coin_results})
+        return templates.TemplateResponse("components/output_table.html", {"request": request, "test_status": mdb.test_status, "coin_results": mdb.test_result.coin_results})
 
 @app.get("/results", response_class=HTMLResponse)
 def ui_get_test_results(request: Request):
@@ -105,7 +109,7 @@ async def ui_run_test(request: Request):
     cycles: Dict[int, int] = {int(key): int(form_data.get(key)) for key in form_data.keys()}
     ## if all of the values are zero then raise an alert
     if mdb.test_status == "running":
-        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig is already running"})
+        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig is already running"}, headers={"HX-Trigger": "updateStatus"})
     elif sum(cycles.values()) == 0:
         return templates.TemplateResponse("components/alert.html", {"request": request, "text": "One or more cycles must be greater than 0"})
 
@@ -116,5 +120,5 @@ async def ui_run_test(request: Request):
 
     Thread(target=mdb.run_test, args=(coins_to_dispense,),daemon= True).start()
 
-    return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!"})
+    return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!"}, headers={"HX-Trigger": "updateStatus"})
 # return Response(status_code=204)
