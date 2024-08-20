@@ -17,16 +17,16 @@ app = FastAPI()
 mdb = MDB()
 
 origins = [
-    'http://127.0.0.1:8000'
-]
+        'http://127.0.0.1:8000'
+        ]
 
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+        )
 
 
 
@@ -51,7 +51,7 @@ def get_test_status():
 def cancel_test():
     mdb.cancel_running_test()
 
- 
+
 @app.post("/api/run")
 def run_test(cycles: dict[int,int]):
     if mdb.test_status == "running":
@@ -73,7 +73,7 @@ def get_test_results():
 def get_csv():
     if not mdb.test_result:
         return HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail="No test results found") 
-   
+
     response = StreamingResponse(StringIO(mdb.test_result.to_csv()), media_type="text/csv")
     response.headers["Content-Disposition"] = "attachment; filename=test_results.csv"
     return response
@@ -113,6 +113,6 @@ async def ui_run_test(request: Request):
         coins_to_dispense.append(coin_to_dispense)
 
     Thread(target=mdb.run_test, args=(coins_to_dispense,),daemon= True).start()
-    
+
     return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!"})
-    # return Response(status_code=204)
+# return Response(status_code=204)

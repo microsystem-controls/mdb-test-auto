@@ -19,7 +19,7 @@ class MDB:
         self._cancel_test_flag = False
         self.device_info: MDBSetupResponse = None
         self._initialise_changer()
-        self.test_result = None
+        self.test_result: AcceptanceTestResult = None
         
        
 
