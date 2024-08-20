@@ -109,9 +109,9 @@ async def ui_run_test(request: Request):
     cycles: Dict[int, int] = {int(key): int(form_data.get(key)) for key in form_data.keys()}
     ## if all of the values are zero then raise an alert
     if mdb.test_status == "running":
-        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig is already running"}, headers={"HX-Trigger": "updateStatus"})
+        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig is already running", "type": "info"}, headers={"HX-Trigger": "updateStatus"})
     elif sum(cycles.values()) == 0:
-        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "One or more cycles must be greater than 0"})
+        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "One or more cycles must be greater than 0", "type": "warning"})
 
     coins_to_dispense = []
     for coin_type in cycles:
@@ -120,5 +120,5 @@ async def ui_run_test(request: Request):
 
     Thread(target=mdb.run_test, args=(coins_to_dispense,),daemon= True).start()
 
-    return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!"}, headers={"HX-Trigger": "updateStatus"})
+    return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!", "type": "info"}, headers={"HX-Trigger": "updateStatus"})
 # return Response(status_code=204)
