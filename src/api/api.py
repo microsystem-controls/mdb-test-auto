@@ -94,11 +94,13 @@ async def read_root(request: Request):
     elif mdb.test_status == "running":
         return templates.TemplateResponse("home.html", {"request": request, "development_mode": development_mode, "test_status": mdb.test_status, "coin_results": mdb.test_result.coin_results})
 
+@app.get("/results", response_class=HTMLResponse)
+def ui_get_test_results(request: Request):
+    return templates.TemplateResponse("components/output_table.html", {"request": request, "coin_results": mdb.test_result.coin_results})
 
 @app.post("/run")
 async def ui_run_test(request: Request):
     form_data = await request.form()
-    print(f"form_data = {form_data}")
     # Convert form data to a dictionary
     cycles: Dict[int, int] = {int(key): int(form_data.get(key)) for key in form_data.keys()}
     ## if all of the values are zero then raise an alert
