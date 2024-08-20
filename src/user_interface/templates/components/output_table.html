@@ -1,33 +1,26 @@
-<form class="container flex flex-col space-y-5 items-center">
-	<table class="rounded-lg w-5/6 mx-auto border-sky-800 border">
-		<thead class="">
-			<tr class="text-left text-gray-400 sm:text-lg border dark:border-2 border-sky-900 dark:hover:bg-slate-700 dark:bg-slate-800 *:px-4 *:py-3">
-				<th class="">#</th>
-				<th class="">coin type</th>
-				<th class="">number of dispenses</th>
-				<th class="">accepted</th>
-				<th class="">rejected</th>
-				<th class="">lost</th>
-				<th class="">total</th>
-			</tr>
-		</thead>
-		<tbody class="text-gray-400 *:border-sky-800 *:border  ">
-			{% for type, coin_cycle_acceptance_result in coin_results.items() %}
-			<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
-				<td>{{ loop.index }}</td>
-				<td>{{ coin_cycle_acceptance_result.coin_type }}</td>
-				<td>{{ coin_cycle_acceptance_result.number_of_dispenses }}</td>
-				<td>{{ coin_cycle_acceptance_result.accepted }}</td>
-				<td>{{ coin_cycle_acceptance_result.rejected }}</td>
-				<td>{{ coin_cycle_acceptance_result.lost }}</td>
-				<td>{{ coin_cycle_acceptance_result.total }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	<!-- <button type="submit" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-tr to-microcoin-blue from-microcoin-purple p-0.5 text-sm font-medium text-gray-500 dark:text-gray-300"> -->
-	<!-- 	<span class="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"> run </span> -->
-	<!-- </button> -->
-	<!-- <button class="text-gray-400" type="submit">submit</button> -->
-</form>
-
+<table class="rounded-lg w-5/6 mx-auto border-sky-800 border">
+	<thead class="">
+		<tr class="text-left text-gray-400 sm:text-lg border dark:border-2 border-sky-900 dark:hover:bg-slate-700 dark:bg-slate-800 *:px-4 *:py-3">
+			<th class="">#</th>
+			<th class="">coin type</th>
+			<th class="">number of dispenses</th>
+			<th class="">accepted</th>
+			<th class="">rejected</th>
+			<th class="">lost</th>
+			<th class="">total</th>
+		</tr>
+	</thead>
+	<tbody class="text-gray-400 *:border-sky-800 *:border  ">
+		{% for type, coin_cycle_acceptance_result in coin_results.items() %}
+		<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
+			<td>{{ loop.index }}</td>
+			<td>{{ coin_cycle_acceptance_result.coin_type }}</td>
+			<td>{{ coin_cycle_acceptance_result.number_of_dispenses }}</td>
+			<td>{{ coin_cycle_acceptance_result.accepted }}</td>
+			<td>{{ coin_cycle_acceptance_result.rejected }}</td>
+			<td>{{ coin_cycle_acceptance_result.lost }}</td>
+			<td>{{ coin_cycle_acceptance_result.total }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
