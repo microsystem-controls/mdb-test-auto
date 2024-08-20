@@ -1,6 +1,8 @@
 from io import StringIO
 import os
 from threading import Thread
+from typing import Dict
+
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -92,6 +94,13 @@ async def read_root(request: Request):
 async def ui_run_test(request: Request):
     form_data = await request.form()
     # Convert form data to a dictionary
-    data = {key: form_data.get(key) for key in form_data.keys()}
-    print(f"data = {data}")
+    form_dictionary: Dict[str, str] = {key: form_data.get(key) for key in form_data.keys()}
+    if sum(map(int, form_dictionary.values())) == 0:
+        # data = mdb.id()
+        # device_info = create_device_info(data[0], data[1])
+        # return templates.TemplateResponse("home.html", {"request": request, "development_mode": "True", "device_info": device_info})
+        # Return the alert message out-of-band
+        return templates.TemplateResponse("components/alert.html", {"request": request})
+        # return HTMLResponse(content=alert_message)
+    print(f"form_dictionary = {form_dictionary}")
     return Response(status_code=204)
