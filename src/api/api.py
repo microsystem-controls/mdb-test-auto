@@ -4,7 +4,7 @@ from threading import Thread
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, Response
 from fastapi.templating import Jinja2Templates
 
 from mdb import MDB, CoinTypesToDespense
@@ -88,3 +88,10 @@ async def read_root(request: Request):
     device_info = create_device_info(data[0], data[1])
     return templates.TemplateResponse("home.html", {"request": request, "development_mode": "True", "device_info": device_info})
 
+@app.post("/run")
+async def ui_run_test(request: Request):
+    form_data = await request.form()
+    # Convert form data to a dictionary
+    data = {key: form_data.get(key) for key in form_data.keys()}
+    print(f"data = {data}")
+    return Response(status_code=204)
