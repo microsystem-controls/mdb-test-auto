@@ -102,7 +102,7 @@ async def ui_get_table(request: Request):
 def ui_get_test_results(request: Request):
     return templates.TemplateResponse("components/output_table.html", {"request": request, "coin_results": mdb.test_result.coin_results})
 
-@app.post("/run")
+@app.post("/run", response_class=HTMLResponse)
 async def ui_run_test(request: Request):
     form_data = await request.form()
     # Convert form data to a dictionary
