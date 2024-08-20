@@ -1,47 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
-	<div class="h-screen">
-		<div class="container flex flex-col mx-auto pt-5 items-center">
-			<div id="alert-container"></div>
+<div class="h-screen">
+	<div class="text-gray-300">
+		{{test_status}}
+	</div>
+	<div class="container flex flex-col mx-auto pt-5 items-center">
+		<div id="alert-container"></div>
+		<div id="display_table">
+			{% if test_status == "stopped" %}
 			{% include 'components/input_table.html' %}
+			{% elif test_status == "running" %}
+			{% include 'components/output_table.html' %}
+			{% endif %}
 		</div>
 	</div>
-	<div class="container-fluid">
-		<h1 class="mt-5 text-center">Mdb Test Automation Acceptance Test</h1>
-		<p class="mt-5 text-center" id="errors" style="display:none"></p>
-		<!-- <div class="row justify-content-center mt-1"> -->
-		<!-- 	<div class="col-lg-6 text-center"> -->
-		<!-- 		<button id='device-info' class="btn btn-primary">device info</button> -->
-		<!-- 	</div> -->
-		<!-- </div> -->
-		<div id="stopped">
-			<div class="row justify-content-center mt-1">
-				<div class="col-lg-6 text-center">
-					<div class="table-responsive">
-						<table id='input-table' class="table mt-1 table-bordered table-striped">
-						</table>
-					</div>
-				</div>
-			</div>
-			<div class="row justify-content-center mt-1">
-				<div class="col-lg-6 text-center">
-					<div id='run-button'</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="running">
+</div>
+<div class="container-fluid">
+	<h1 class="mt-5 text-center">Mdb Test Automation Acceptance Test</h1>
+	<p class="mt-5 text-center" id="errors" style="display:none"></p>
+	<!-- <div class="row justify-content-center mt-1"> -->
+	<!-- 	<div class="col-lg-6 text-center"> -->
+	<!-- 		<button id='device-info' class="btn btn-primary">device info</button> -->
+	<!-- 	</div> -->
+	<!-- </div> -->
+	<div id="stopped">
 		<div class="row justify-content-center mt-1">
 			<div class="col-lg-6 text-center">
 				<div class="table-responsive">
-					<table id='result-table' class="table mt-1 table-bordered table-striped">
+					<table id='input-table' class="table mt-1 table-bordered table-striped">
 					</table>
 				</div>
 			</div>
 		</div>
+		<div class="row justify-content-center mt-1">
+			<div class="col-lg-6 text-center">
+				<div id='run-button'</div>
+			</div>
+		</div>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="/static/js/scripts.js"></script>
+</div>
+<div id="running">
+	<div class="row justify-content-center mt-1">
+		<div class="col-lg-6 text-center">
+			<div class="table-responsive">
+				<table id='result-table' class="table mt-1 table-bordered table-striped">
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="/static/js/scripts.js"></script>
 
 {% endblock %}
 

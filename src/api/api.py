@@ -86,21 +86,33 @@ templates = Jinja2Templates(directory=os.path.join(static_path,"..","user_interf
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    data = mdb.id()
-    device_info = create_device_info(data[0], data[1])
-    return templates.TemplateResponse("home.html", {"request": request, "development_mode": "True", "device_info": device_info})
+    development_mode = "True"
+    if mdb.test_status == "stopped":
+        data = mdb.id()
+        device_info = create_device_info(data[0], data[1])
+        return templates.TemplateResponse("home.html", {"request": request, "development_mode": development_mode, "device_info": device_info, "test_status": mdb.test_status})
+    elif mdb.test_status == "running":
+        return templates.TemplateResponse("home.html", {"request": request, "development_mode": development_mode, "test_status": mdb.test_status, "coin_results": mdb.test_result.coin_results})
+
 
 @app.post("/run")
 async def ui_run_test(request: Request):
     form_data = await request.form()
+    print(f"form_data = {form_data}")
     # Convert form data to a dictionary
-    form_dictionary: Dict[str, str] = {key: form_data.get(key) for key in form_data.keys()}
-    if sum(map(int, form_dictionary.values())) == 0:
-        # data = mdb.id()
-        # device_info = create_device_info(data[0], data[1])
-        # return templates.TemplateResponse("home.html", {"request": request, "development_mode": "True", "device_info": device_info})
-        # Return the alert message out-of-band
-        return templates.TemplateResponse("components/alert.html", {"request": request})
-        # return HTMLResponse(content=alert_message)
-    print(f"form_dictionary = {form_dictionary}")
-    return Response(status_code=204)
+    cycles: Dict[int, int] = {int(key): int(form_data.get(key)) for key in form_data.keys()}
+    ## if all of the values are zero then raise an alert
+    if mdb.test_status == "running":
+        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig is already running"})
+    elif sum(cycles.values()) == 0:
+        return templates.TemplateResponse("components/alert.html", {"request": request, "text": "One or more cycles must be greater than 0"})
+
+    coins_to_dispense = []
+    for coin_type in cycles:
+        coin_to_dispense = CoinTypesToDespense(coin_type, cycles[coin_type])
+        coins_to_dispense.append(coin_to_dispense)
+
+    Thread(target=mdb.run_test, args=(coins_to_dispense,),daemon= True).start()
+    
+    return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!"})
+    # return Response(status_code=204)
