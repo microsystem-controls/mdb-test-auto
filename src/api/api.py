@@ -34,10 +34,13 @@ app.add_middleware(
 def dispense(coin_type:int):
     return mdb.dispense(coin_type, 1)
 
-@app.get("/api/device_info")
-def get_device_info() -> DeviceInfo:
+def fetch_device_info() -> DeviceInfo:
     data = mdb.id()
     return create_device_info(data[0], data[1])
+
+@app.get("/api/device_info")
+def get_device_info() -> DeviceInfo:
+    return fetch_device_info()
 
 @app.get("/api/poll")
 def poll():
@@ -92,13 +95,12 @@ async def read_root(request: Request):
 @app.get("/table", response_class=HTMLResponse)
 async def ui_get_table(request: Request):
     if mdb.test_status == "stopped":
-        data = mdb.id()
-        device_info = create_device_info(data[0], data[1])
+        device_info = fetch_device_info()
         return templates.TemplateResponse("components/input_table.html", {"request": request, "device_info": device_info, "test_status": mdb.test_status})
     elif mdb.test_status == "running":
-        return templates.TemplateResponse("components/output_table.html", {"request": request, "test_status": mdb.test_status, "coin_results": mdb.test_result.coin_results})
+        return templates.TemplateResponse("components/result_page.html", {"request": request, "test_status": mdb.test_status, "coin_results": mdb.test_result.coin_results})
 
-@app.get("/results", response_class=HTMLResponse)
+@app.get("/output_table", response_class=HTMLResponse)
 def ui_get_test_results(request: Request):
     return templates.TemplateResponse("components/output_table.html", {"request": request, "coin_results": mdb.test_result.coin_results})
 
@@ -122,3 +124,9 @@ async def ui_run_test(request: Request):
 
     return templates.TemplateResponse("components/alert.html", {"request": request, "text": "jig running now!", "type": "info"}, headers={"HX-Trigger": "updateStatus"})
 # return Response(status_code=204)
+
+@app.delete("/run", response_class=HTMLResponse)
+async def ui_cancel_run(request: Request):
+    mdb.cancel_running_test()
+    device_info = fetch_device_info()
+    return templates.TemplateResponse("components/input_table.html", {"request": request, "device_info": device_info, "test_status": mdb.test_status})

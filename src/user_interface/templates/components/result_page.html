@@ -1,0 +1,12 @@
+<div class="container flex flex-col items-center space-y-5">
+	{% include "components/output_table.html" %}
+	<div class="container flex gap-5 justify-center">
+		<button onclick="window.location.href='/api/csv'" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-tr to-green-400 from-blue-600 p-0.5 text-sm font-medium text-gray-500 focus:outline-none focus:ring-4 focus:ring-green-200 group-hover:from-green-400 group-hover:to-blue-600 dark:text-gray-300 dark:focus:ring-green-800">
+			<span class="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"> export csv </span>
+		</button>
+
+		<button hx-delete="/run" hx-swap="innerHTML" hx-target="#display_table" class="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-tr to-green-400 from-blue-600 p-0.5 text-sm font-medium text-gray-500 focus:outline-none focus:ring-4 focus:ring-green-200 group-hover:from-green-400 group-hover:to-blue-600 dark:text-gray-300 dark:focus:ring-green-800">
+			<span class="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"> cancel </span>
+		</button>
+	</div>
+</div>
