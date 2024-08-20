@@ -84,5 +84,7 @@ templates = Jinja2Templates(directory=os.path.join(static_path,"..","user_interf
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request, "development_mode": "True"})
+    data = mdb.id()
+    device_info = create_device_info(data[0], data[1])
+    return templates.TemplateResponse("home.html", {"request": request, "development_mode": "True", "device_info": device_info})
 

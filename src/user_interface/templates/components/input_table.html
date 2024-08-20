@@ -1,36 +1,22 @@
 <table class="rounded-lg w-5/6 mx-auto border-sky-800 border">
 	<thead class="">
-  <tr class="text-left text-gray-400 text-lg border dark:border-2 border-sky-900 dark:hover:bg-slate-700 dark:bg-slate-800 *:px-4 *:py-3">
-    <th class="">Firstname</th>
-    <th class="">Lastname</th>
-    <th class="">Age</th>
-    <th class="">Sex</th>
-  </tr>
-		</thead>
+		<tr class="text-left text-gray-400 text-lg border dark:border-2 border-sky-900 dark:hover:bg-slate-700 dark:bg-slate-800 *:px-4 *:py-3">
+			<th class="">#</th>
+			<th class="">Serial Number</th>
+			<th class="">denominations</th>
+			<th class="">cycles</th>
+		</tr>
+	</thead>
 	<tbody class="text-gray-400 *:border-sky-800 *:border  ">
-	<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
-			<td>Jill</td>
-			<td>Smith</td>
-			<td>50</td>
-			<td>Male</td>
-		</tr>		
-		<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
-			<td>Jill</td>
-			<td>Smith</td>
-			<td>50</td>
-			<td>Male</td>
-		</tr>		
-		<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
-			<td>Jill</td>
-			<td>Smith</td>
-			<td>50</td>
-			<td>Male</td>
-		</tr>		
-		<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
-			<td>Jill</td>
-			<td>Smith</td>
-			<td>50</td>
-			<td>Male</td>
-		</tr>		
+		{% for item in device_info.denominations %}
+			<tr class="dark:hover:bg-slate-800  odd:dark:bg-slate-900 even:dark:bg-slate-850 *:px-4 *:py-3">
+				<td>{{ loop.index }}</td>
+				<td>{{ device_info["serial_number"] }}</td>
+				<td>{{ item }}</td>
+				<td>
+				<input class="bg-slate-600 rounded-lg w-full p-1" type="number" min=0 value=0 step=1> </input>
+				</td>
+			</tr>
+		{% endfor %}
 	</tbody>
 </table>
