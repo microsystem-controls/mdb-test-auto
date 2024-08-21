@@ -747,6 +747,10 @@ video {
   width: 100vw;
 }
 
+.max-w-screen-lg {
+  max-width: 1024px;
+}
+
 .flex-shrink-0 {
   flex-shrink: 0;
 }
@@ -781,8 +785,16 @@ video {
   margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
 }
 
+.overflow-auto {
+  overflow: auto;
+}
+
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
 .rounded-lg {

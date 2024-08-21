@@ -3,7 +3,7 @@
 <div class="h-screen">
 	<div class="container flex flex-col mx-auto pt-5 items-center">
 		<div id="alert-container"></div>
-		<div id="display_table" hx-get="/table" hx-trigger="load, updateStatus from:body" hx-swap="innerHTML">
+		<div id="display_table" hx-get="/table" hx-trigger="load, updateStatus from:body" hx-swap="innerHTML" class="w-full">
 			<img alt="loading table..." class="htmx-indicator" width="450" src="/static/img/bars.svg"/>
 		</div>
 	</div>
